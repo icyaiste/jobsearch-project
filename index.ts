@@ -9,9 +9,10 @@ type JobSearchResponse = {
     hits: JobHit[];
 }
 
-const searchJobs = async (municipalityCode: number, profession: string): Promise<void> => {
+const searchJobs = async (profession : string, city: string): Promise<void> => {
   try {
-    const result = `https://jobsearch.api.jobtechdev.se/search?municipality=${municipalityCode}&q=${profession}&offset=0&limit=10`;
+    const mixedSearch = `${profession} ${city}`;
+    const result = `https://jobsearch.api.jobtechdev.se/search?q=${mixedSearch}&offset=0&limit=10`;
     const response = await fetch(result);
     if(!response.ok){
     throw new Error(`API request failed with status ${response.status} (${response.statusText})`
@@ -53,9 +54,9 @@ const runApp = async (): Promise<void> => {
   try {
     console.log("Welcome to the Job Search App!");
     console.log("This app searches for jobs using JobTeach API");
-    const municipalityCode = 1480; //Gothenburg taxonomy code
-    const profession = "fullstack developer";
-    await searchJobs(municipalityCode, profession);
+    const city = "Göteborg"
+    const profession = "fullstack developer"
+    await searchJobs(city, profession);
   } catch (error) {
     console.error(error);
   }
