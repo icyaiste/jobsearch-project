@@ -1,11 +1,7 @@
 type JobHit ={
     headline: string;
-    employer: {
-        name: string;
-    };
-    workplace_address: {
-        municipality: string;
-    };
+    employer: {name: string};
+    workplace_address: {municipality: string};
     publication_date: string;
 }
 
@@ -13,9 +9,9 @@ type JobSearchResponse = {
     hits: JobHit[];
 }
 
-const searchJobs = async (keyword: string): Promise<void> => {
+const searchJobs = async (municipalityCode: number, profession: string): Promise<void> => {
   try {
-    const result = `https://jobsearch.api.jobtechdev.se/search?q=${keyword}&offset=0&limit=10`;
+    const result = `https://jobsearch.api.jobtechdev.se/search?municipality=${municipalityCode}&q=${profession}&offset=0&limit=10`;
     const response = await fetch(result);
     if(!response.ok){
     throw new Error(`API request failed with status ${response.status} (${response.statusText})`
@@ -57,11 +53,12 @@ const runApp = async (): Promise<void> => {
   try {
     console.log("Welcome to the Job Search App!");
     console.log("This app searches for jobs using JobTeach API");
-    const keyword = "Göteborg";
-    await searchJobs(keyword);
+    const municipalityCode = 1480; //Gothenburg taxonomy code
+    const profession = "fullstack developer";
+    await searchJobs(municipalityCode, profession);
   } catch (error) {
     console.error(error);
   }
-};
+}
 
 runApp();
